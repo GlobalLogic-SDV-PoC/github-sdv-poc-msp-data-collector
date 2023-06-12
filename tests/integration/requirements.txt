@@ -1,0 +1,6 @@
+pytest==7.3.1
+boto3==1.26.138
+docker==6.1.2
+python-dotenv==1.0.0
+awsiotsdk==1.15.1
+awscrt==0.16.18

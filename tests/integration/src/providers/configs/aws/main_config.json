@@ -1,0 +1,9 @@
+{
+    "ipc": {
+        "port": 5555
+    },
+    "aws": {
+        "endpoint": "a2vups147zkgmn-ats.iot.eu-west-1.amazonaws.com",
+        "clientId": "auto_test_fcb1523f-b108-4845-9f92-6d4c54e9c060"
+    }
+}

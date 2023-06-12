@@ -1,0 +1,28 @@
+{
+    "ipc": {
+        "host": "localhost",
+        "port": 5555
+    },
+    "collectors": {
+        "root_send": "/data_collection/send_data",
+        "root_query": "/data_collection/query_data",
+        "temp": {
+            "enabled": true,
+            "interval": 15,
+            "extract_path": "/sys/class/thermal/thermal_zone0/temp",
+            "topic": "/temp"
+        },
+        "storage": {
+            "enabled": true,
+            "interval": 60,
+            "extract_path": "/tmp",
+            "topic": "/storage"
+        },
+        "ram": {
+            "enabled": true,
+            "interval": 30,
+            "extract_path": "/proc/meminfo",
+            "topic": "/ram"
+        }
+    }
+}
