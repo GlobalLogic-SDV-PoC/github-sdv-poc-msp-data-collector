@@ -65,7 +65,7 @@ void App::initDefaultLogger(std::string_view filepath,
                             std::chrono::seconds flush_interval)
 {
 #ifdef __ANDROID__
-    auto console_logger = std::make_shared<spdlog::sinks::android_sink_mt>();
+    auto console_logger = std::make_shared<spdlog::sinks::android_sink_mt>("dcol");
 #else
     auto console_logger = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 #endif
@@ -88,6 +88,7 @@ void App::initDefaultLogger(std::string_view filepath,
 
     spdlog::set_default_logger(std::move(new_logger));
     spdlog::set_pattern("[%H:%M:%S.%e] [%^%l%$] %v");
+    spdlog::set_level(static_cast<spdlog::level::level_enum>(SPDLOG_ACTIVE_LEVEL));
     spdlog::flush_every(flush_interval);
 }
 void App::onIpcConnected()

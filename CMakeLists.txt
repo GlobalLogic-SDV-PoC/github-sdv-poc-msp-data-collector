@@ -11,6 +11,18 @@ option(DCOL_ENABLE_CODE_COVERAGE "Specify if code coverage should be enabled"
        OFF)
 option(DCOL_EXTERNAL_SPDLOG "Specify whether to use an external spdlog library"
        OFF)
+set(LOG_LEVELS
+    TRACE
+    DEBUG
+    INFO
+    WARN
+    ERROR
+    CRITICAL
+    OFF)
+
+set(DCOL_LOG_LEVEL
+    "TRACE"
+    CACHE STRING "Specify spdlog SPDLOG_ACTIVE_LEVEL ${LOG_LEVELS}")
 
 if(DCOL_ENABLE_TESTING)
     if(DCOL_ENABLE_CODE_COVERAGE)
@@ -31,6 +43,16 @@ add_library(${PROJECT_NAME} STATIC src/extractors.cpp src/event_scheduler.cpp
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 target_link_libraries(${PROJECT_NAME} PUBLIC ipc spdlog::spdlog std::filesystem)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
+
+list(FIND LOG_LEVELS ${DCOL_LOG_LEVEL} LOG_LEVEL_INDEX)
+if(LOG_LEVEL_INDEX EQUAL -1)
+    message(
+        FATAL_ERROR
+            "Invalid LOG_LEVEL: ${DCOL_LOG_LEVEL}. Allowed values are ${LOG_LEVELS}."
+    )
+endif()
+message("Setting LOG_LEVEL to ${DCOL_LOG_LEVEL}")
+target_compile_definitions(${PROJECT_NAME} PRIVATE SPDLOG_ACTIVE_LEVEL=${LOG_LEVEL_INDEX})
 
 if(DCOL_ENABLE_TESTING)
     add_subdirectory(tests/unit)
