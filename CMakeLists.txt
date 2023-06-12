@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5.2)
 project(
-    data_collection
+    data_collection_core
     LANGUAGES CXX
     VERSION 1.0.0)
 
@@ -26,11 +26,11 @@ add_subdirectory(ipc)
 
 find_package(Filesystem REQUIRED COMPONENTS Final Experimental)
 
-add_library(data_collection STATIC src/extractors.cpp src/event_scheduler.cpp
+add_library(${PROJECT_NAME} STATIC src/extractors.cpp src/event_scheduler.cpp
                                    src/app.cpp)
-target_include_directories(data_collection PUBLIC include)
-target_link_libraries(data_collection PUBLIC ipc spdlog::spdlog std::filesystem)
-target_compile_features(data_collection PUBLIC cxx_std_17)
+target_include_directories(${PROJECT_NAME} PUBLIC include)
+target_link_libraries(${PROJECT_NAME} PUBLIC ipc spdlog::spdlog std::filesystem)
+target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
 if(DCOL_ENABLE_TESTING)
     add_subdirectory(tests/unit)
