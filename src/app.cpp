@@ -65,7 +65,7 @@ void App::initDefaultLogger(std::string_view filepath,
                             std::chrono::seconds flush_interval)
 {
 #ifdef __ANDROID__
-    auto console_logger = spdlog::android_logger_mt("android");
+    auto console_logger = std::make_shared<spdlog::sinks::android_sink_mt>();
 #else
     auto console_logger = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 #endif
