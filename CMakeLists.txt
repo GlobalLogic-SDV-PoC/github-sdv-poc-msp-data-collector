@@ -11,6 +11,8 @@ option(DCOL_ENABLE_CODE_COVERAGE "Specify if code coverage should be enabled"
        OFF)
 option(DCOL_EXTERNAL_SPDLOG "Specify whether to use an external spdlog library"
        OFF)
+option(DCOL_EXTERNAL_GTEST
+       "Specify whether to use an external googletest library" OFF)
 set(LOG_LEVELS
     TRACE
     DEBUG
@@ -29,7 +31,9 @@ if(DCOL_ENABLE_TESTING)
         include(CodeCoverage)
         append_coverage_compiler_flags()
     endif()
-    add_subdirectory(external/gtest)
+    if(NOT DCOL_EXTERNAL_GTEST)
+        add_subdirectory(external/gtest)
+    endif()
 endif()
 if(NOT DCOL_EXTERNAL_SPDLOG)
     add_subdirectory(external/spdlog)
@@ -52,7 +56,8 @@ if(LOG_LEVEL_INDEX EQUAL -1)
     )
 endif()
 message("Setting LOG_LEVEL to ${DCOL_LOG_LEVEL}")
-target_compile_definitions(${PROJECT_NAME} PRIVATE SPDLOG_ACTIVE_LEVEL=${LOG_LEVEL_INDEX})
+target_compile_definitions(${PROJECT_NAME}
+                           PRIVATE SPDLOG_ACTIVE_LEVEL=${LOG_LEVEL_INDEX})
 
 if(DCOL_ENABLE_TESTING)
     add_subdirectory(tests/unit)
