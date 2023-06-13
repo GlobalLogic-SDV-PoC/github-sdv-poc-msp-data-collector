@@ -2,6 +2,7 @@
 
 #include <cassert>
 
+#include "spdlog/fmt/chrono.h"
 #include "spdlog/spdlog.h"
 
 using std::chrono::milliseconds;
@@ -17,14 +18,12 @@ InfiniteEvent::InfiniteEvent(const std::function<void()>& callback, const millis
 
 void InfiniteEvent::update(const milliseconds& elapsed)
 {
-    SPDLOG_DEBUG("[dcol] Update InfiniteEvent: starting...");
     m_current_time += elapsed;
     while (m_current_time >= m_period)
     {
         m_callback();
         m_current_time -= m_period;
     }
-    SPDLOG_DEBUG("[dcol] Update InfiniteEvent: done.");
 }
 
 Event::Event(const std::function<void()>& callback, const milliseconds& period, uint32_t times_to_repeat)
@@ -38,7 +37,6 @@ Event::Event(const std::function<void()>& callback, const milliseconds& period, 
 
 void Event::update(const milliseconds& elapsed)
 {
-    SPDLOG_DEBUG("[dcol] Update Event: starting...");
     if (is_finished())
     {
         return;
@@ -50,11 +48,10 @@ void Event::update(const milliseconds& elapsed)
         m_current_time -= m_period;
         set_finished(!(--m_times_to_repeat));
     }
-    SPDLOG_DEBUG("[dcol] Update Event: done.");
 }
 void EventScheduler::update(const milliseconds& elapsed)
 {
-    SPDLOG_DEBUG("[dcol] Update events: starting...");
+    SPDLOG_TRACE("[dcol] Updating events elapsed: {}", elapsed);
     const std::scoped_lock lock(m_mutex);
     for (auto it = m_events.begin(); it != m_events.end();)
     {
@@ -67,25 +64,22 @@ void EventScheduler::update(const milliseconds& elapsed)
         {
             ++it;
         }
-    };
-    SPDLOG_DEBUG("[dcol] Update events: done.");
+    }
 }
 size_t EventScheduler::schedule(std::unique_ptr<IEvent>&& event)
 {
-    SPDLOG_DEBUG("[dcol] Schedule event: starting...");
     assert(event);
     const std::scoped_lock lock(m_mutex);
     static size_t descriptor = 0;
     m_events.emplace(descriptor, std::move(event));
-    SPDLOG_DEBUG("[dcol] Schedule event: done.");
+    SPDLOG_DEBUG("[dcol] Scheduled event: {}", descriptor);
     return descriptor++;
 }
 
 void EventScheduler::unschedule(size_t descriptor)
 {
-    SPDLOG_DEBUG("[dcol] Schedule event: starting...");
     const std::scoped_lock lock(m_mutex);
     m_events.erase(descriptor);
-    SPDLOG_DEBUG("[dcol] Unschedule event: done.");
+    SPDLOG_DEBUG("[dcol] Unscheduled event: {}", descriptor);
 }
 }  // namespace dcol

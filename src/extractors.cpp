@@ -112,13 +112,21 @@ nlohmann::json getTemperature(const fs::path& path)
 
 nlohmann::json getStorageSpace(const fs::path& path)
 {
-    std::error_code ec;
-    const fs::space_info si = fs::space(path, ec);
-    SPDLOG_INFO("[dcol] {} Available Storage Space: {} Total Storage Space: {}", path.c_str(), static_cast<std::intmax_t>(si.available), static_cast<std::intmax_t>(si.capacity));
+    try
+    {
+        const fs::space_info si = fs::space(path);
 
-    nlohmann::json result;
-    result["available"] = si.available;
-    result["capacity"] = si.capacity;
-    return result;
+        SPDLOG_INFO("[dcol] {} Available Storage Space: {} Total Storage Space: {}", path.c_str(), si.available, si.capacity);
+
+        nlohmann::json result;
+        result["available"] = si.available;
+        result["capacity"] = si.capacity;
+        return result;
+    }
+    catch (const fs::filesystem_error& e)
+    {
+        SPDLOG_ERROR("[dcol] getStorageSpace filesystem_error: {}", e.what());
+    }
+    return {};
 }
 }  // namespace dcol
