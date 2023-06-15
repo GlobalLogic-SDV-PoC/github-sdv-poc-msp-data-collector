@@ -11,8 +11,7 @@ if(DCOL_ENABLE_CODE_COVERAGE)
         EXECUTABLE
         ${TEST_EXEC}
         EXCLUDE
-        ${PROJECT_SOURCE_DIR}/ipc
-        ${PROJECT_SOURCE_DIR}/external
+        ${PROJECT_SOURCE_DIR}/dep
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${PROJECT_BINARY_DIR})
 endif()
