@@ -1,6 +1,26 @@
 version: 0.2
 
 phases:
+  install:
+    runtime-versions:
+      python: 3.9
+    commands:
+      - pip install gcovr
+      - yum install -y -q
+          cmake3
+          gcc
+          ninja-build
   build:
     commands:
-      - python -c 'print("This is a unit test stage")'
+      - echo "Running unit tests and generate reports..."
+      # Prepare the CMake build folder
+      - mkdir build && cd build
+      # Build and Run Test Executables
+      - cmake3 -G Ninja -DCMAKE_BUILD_TYPE=Debug -DDCOL_ENABLE_TESTING=ON -DDCOL_ENABLE_CODE_COVERAGE=ON ..
+      - cmake3 --build . --parallel `nproc` --target data_collection_core_coverage
+reports:
+  gtest_reports:
+    files:
+      - build/data_collection_core_coverage.xml
+    discard-paths: yes
+    file-format: COBERTURAXML
