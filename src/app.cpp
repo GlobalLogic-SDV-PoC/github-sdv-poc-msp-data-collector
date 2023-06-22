@@ -99,21 +99,12 @@ void App::onIpcConnected()
 
     auto& collectors_info = m_config["collectors"];
     std::string root_query = collectors_info["root_query"];
-    if (collectors_info["temp"]["enabled"])
-    {
-        subscribe_packet->header["topic"] = root_query + collectors_info["temp"]["topic"].get<std::string>();
-        m_ipc_client->post(subscribe_packet);
-    }
-    if (collectors_info["storage"]["enabled"])
-    {
-        subscribe_packet->header["topic"] = root_query + collectors_info["storage"]["topic"].get<std::string>();
-        m_ipc_client->post(subscribe_packet);
-    }
-    if (collectors_info["ram"]["enabled"])
-    {
-        subscribe_packet->header["topic"] = root_query + collectors_info["ram"]["topic"].get<std::string>();
-        m_ipc_client->post(subscribe_packet);
-    }
+    subscribe_packet->header["topic"] = root_query + collectors_info["temp"]["topic"].get<std::string>();
+    m_ipc_client->post(subscribe_packet);
+    subscribe_packet->header["topic"] = root_query + collectors_info["storage"]["topic"].get<std::string>();
+    m_ipc_client->post(subscribe_packet);
+    subscribe_packet->header["topic"] = root_query + collectors_info["ram"]["topic"].get<std::string>();
+    m_ipc_client->post(subscribe_packet);
 }
 
 void App::onIpcReceived(std::shared_ptr<ipc::Packet> packet)
