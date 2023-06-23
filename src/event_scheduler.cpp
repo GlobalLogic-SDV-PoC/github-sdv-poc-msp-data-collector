@@ -51,7 +51,6 @@ void Event::update(const milliseconds& elapsed)
 }
 void EventScheduler::update(const milliseconds& elapsed)
 {
-    SPDLOG_TRACE("[dcol] Updating events elapsed: {}", elapsed);
     const std::scoped_lock lock(m_mutex);
     for (auto it = m_events.begin(); it != m_events.end();)
     {
