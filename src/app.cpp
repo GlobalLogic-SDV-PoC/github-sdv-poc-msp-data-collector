@@ -116,7 +116,7 @@ void App::onIpcReceived(std::shared_ptr<ipc::Packet> packet)
     }
     // TODO: proper protocol handling
     const auto topic = packet->header["topic"].get<std::string>();
-    const auto slash = topic.rfind('\\');
+    const auto slash = topic.rfind('/');
     if (slash == std::string::npos)
     {
         SPDLOG_ERROR("[dcol] invalid topic {}.", topic);
