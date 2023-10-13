@@ -1,0 +1,5 @@
+if(BUILD_TESTING)
+    find_package(ament_cmake_gtest REQUIRED)
+    ament_add_gtest(${PROJECT_NAME}_test extractors.tst.cpp)
+    target_link_libraries(${PROJECT_NAME}_test ${PROJECT_NAME}_lib)
+endif()

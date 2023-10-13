@@ -1,0 +1,6 @@
+[submodule "dep/external/json"]
+	path = dep/external/json
+	url = https://github.com/nlohmann/json
+[submodule "dep/external/fmt"]
+	path = dep/external/fmt
+	url = https://github.com/fmtlib/fmt.git
