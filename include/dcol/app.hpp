@@ -2,7 +2,7 @@
 #include <memory>
 
 #include "dcol/context.hpp"
-#include "nlohmann/json.hpp"
+#include "ipc/nlohmann/json.hpp"
 #include "scheduler.hpp"
 
 namespace dcol

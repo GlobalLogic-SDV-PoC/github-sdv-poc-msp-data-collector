@@ -5,8 +5,7 @@
 #include <vector>
 
 #include "context.hpp"
-#include "nlohmann/json.hpp"
-#include "nlohmann/json_fwd.hpp"
+#include "ipc/nlohmann/json.hpp"
 
 namespace dcol
 {

@@ -8,7 +8,7 @@
 #include <string>
 
 #include "context.hpp"
-#include "nlohmann/json.hpp"
+#include "ipc/nlohmann/json.hpp"
 #include "scoped_handle.hpp"
 #include "std_msgs/msg/string.hpp"
 

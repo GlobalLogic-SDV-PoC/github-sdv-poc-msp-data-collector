@@ -4,3 +4,9 @@
 [submodule "dep/external/fmt"]
 	path = dep/external/fmt
 	url = https://github.com/fmtlib/fmt.git
+[submodule "dep/external/ipc"]
+	path = dep/external/ipc
+	url = codecommit::eu-west-1://raspberry-ipc-library
+[submodule "dep/internal/ipc"]
+	path = dep/internal/ipc
+	url = codecommit::eu-west-1://raspberry-ipc-library

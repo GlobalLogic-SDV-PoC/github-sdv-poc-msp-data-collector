@@ -11,7 +11,6 @@
 
 #include "dcol/extractors.hpp"
 #include "fmt/core.h"
-#include "nlohmann/json_fwd.hpp"
 
 namespace dcol
 {
@@ -114,7 +113,7 @@ void App::parse_config()
         }
         catch (std::exception& e)
         {
-            RCLCPP_ERROR(m_ctx->node->get_logger(), "%s", fmt::format("Failed to used config from parameter {} due to {} Using default", config_path, e.what()).c_str());
+            RCLCPP_ERROR(m_ctx->node->get_logger(), "Failed to used config from parameter %s due to %s Using default", config_path.c_str(), e.what());
             init_default_config();
         }
     }
