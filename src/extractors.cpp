@@ -76,6 +76,7 @@ nlohmann::json getMemInfo(const fs::path& path)
     else
     {   
         memUsed = 0;
+        memAvail = memTotal;
     }
     
     SPDLOG_INFO("[dcol] Total Memory: {} Available Memory: {} Used Memory: {}", memTotal, memAvail, memUsed);
