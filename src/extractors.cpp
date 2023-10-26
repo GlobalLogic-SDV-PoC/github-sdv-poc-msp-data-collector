@@ -69,7 +69,7 @@ nlohmann::json getMemInfo(const fs::path& path)
             continue;
         }
     }
-    if (memAvail > 0 && memTotal > memAvail)
+    if (memAvail >= 0 && memTotal >= memAvail)
     {
         memUsed = memTotal - memAvail;
     }
