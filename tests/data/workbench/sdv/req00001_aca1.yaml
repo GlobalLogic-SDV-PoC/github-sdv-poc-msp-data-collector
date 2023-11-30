@@ -1,0 +1,112 @@
+check-app-version:
+  -
+    summary: It check Ubunty is 18.04
+    workbench_name: sdv-user-awscomputeserver
+    cmd_to_execute: cat /etc/os-release
+    checks:
+    -
+      name: grep output
+      expected_result: .*NAME="Ubuntu".*
+    -
+      name: check version
+      version_pattern: 'VERSION_ID=\s*([\d.]+)'
+      expected_result: '18.04'
+      version_comparator: '=='
+  
+  -
+    summary: It check VirtualBox Verions is 
+    workbench_name: sdv-user-awscomputeserver
+    cmd_to_execute: vboxmanage --version
+    checks:
+    -
+      name: grep output
+      expected_result: .*NAME="Ubuntu".*VERSION_ID="18.04".*
+  
+  -
+    summary: It check Python version >= 3.9
+    workbench_name: sdv-user-awscomputeserver
+    cmd_to_execute: python3 --version
+    checks:
+    -
+      name: check version
+      version_pattern: 'Python\s*([\d.]+)'
+      expected_result: '3.9'
+      version_comparator: '>='
+  
+  -
+    summary: It check CMAKE version >= 3.17.1
+    workbench_name: sdv-user-awscomputeserver
+    cmd_to_execute: cmake --version
+    checks:
+    -
+      name: check version
+      version_pattern: 'cmake version\s*([\d.]+)'
+      expected_result: '3.17.1'
+      version_comparator: '>='
+
+  -
+    summary: It check Perl version >= 5.26
+    workbench_name: sdv-user-awscomputeserver
+    cmd_to_execute: perl -v
+    checks:
+    -
+      name: check version
+      version_pattern: '.*This is perl.*v\s*([\d.]+)'
+      expected_result: '5.26'
+      version_comparator: '>='
+  
+  -
+    summary: It check Filepp version >= 1.8.0?????
+    workbench_name: sdv-user-awscomputeserver
+    cmd_to_execute: python3 --version
+    checks:
+    -
+      name: grep output
+      expected_result: Python 1.8.0
+  
+  -
+    summary: It check Swig version >= 3.0.12
+    workbench_name: sdv-user-awscomputeserver
+    cmd_to_execute: swig -version
+    checks:
+    -
+      name: grep output
+      expected_result: .*Python 3.10.12.*
+  
+  -
+    summary: It check Bison version >= 3.0.4
+    workbench_name: sdv-user-awscomputeserver
+    cmd_to_execute: bison --version
+    checks:
+    -
+      name: grep output
+      expected_result: Python 3.10.12
+  
+  -
+    summary: It check Git version >= 2.17.0
+    workbench_name: sdv-user-awscomputeserver
+    cmd_to_execute: git --version
+    checks:
+    -
+      name: check version
+      version_pattern: 'git version\s*([\d.]+)'
+      expected_result: '2.17.0'
+      version_comparator: '>='
+
+  -
+    summary: It check dtc version >= 1.4.4??? 
+    workbench_name: sdv-user-awscomputeserver
+    cmd_to_execute: python3 --version
+    checks:
+    -
+      name: grep output
+      expected_result: Python 3.10.12
+  
+  -
+    summary: It check dotnet-sdk version is 2.1
+    workbench_name: sdv-user-awscomputeserver
+    cmd_to_execute: dotnet sdk check
+    checks:
+    -
+      name: grep output
+      expected_result: Python 3.10.12
