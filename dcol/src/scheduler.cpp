@@ -19,7 +19,7 @@ auto Scheduler::register_query_collector(const std::string& publish_topic,
     new_collector->publish_topic = publish_topic;
     new_collector->sender = sender;
     new_collector->collector = collector;
-    const auto send_data_fn = [ctx = m_ctx, weak = std::weak_ptr<CollectorInfo>(new_collector)]()
+    new_collector->collect_and_send = [ctx = m_ctx, weak = std::weak_ptr<CollectorInfo>(new_collector)]()
     {
         if (weak.expired())
         {
@@ -37,7 +37,6 @@ auto Scheduler::register_query_collector(const std::string& publish_topic,
             RCLCPP_INFO(ctx->node->get_logger(), "Failed to send msg to topic: %s", info->publish_topic.c_str());
         }
     };
-    new_collector->collect_and_send = send_data_fn;
     m_messages[query_topic].push_front(std::move(new_collector));
 
     const auto it = std::begin(m_messages);

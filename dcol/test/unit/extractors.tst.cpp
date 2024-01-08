@@ -1,9 +1,6 @@
-#include <gtest/gtest.h>
-
-#include <fstream>
-
 #include "dcol/extractors.hpp"
-#include "gtest/gtest.h"
+
+#include <gtest/gtest.h>
 
 class ParserTest : public ::testing::Test
 {

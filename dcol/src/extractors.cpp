@@ -6,8 +6,6 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-#include <stdexcept>
-
 
 namespace dcol
 {

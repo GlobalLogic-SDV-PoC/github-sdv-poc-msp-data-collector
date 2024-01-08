@@ -1,7 +1,6 @@
 #include "dcol/app.hpp"
 
 #include <chrono>
-#include <cstring>
 #include <exception>
 #include <fstream>
 #include <initializer_list>
@@ -10,6 +9,7 @@
 #include <memory>
 #include <string>
 #include <tuple>
+#include <utility>
 
 #include "dcol/extractors.hpp"
 #include "nlohmann/json.hpp"
@@ -27,10 +27,11 @@ void App::start()
     using std::placeholders::_1;
     m_ipc_client->connect(m_config["server_address"], "dcol_response", m_ctx->node, std::bind(&App::on_ipc_received, this, _1), [this]()
                           {
-                            for(const auto& topic : m_subbed_topics)
-                            {
-                                m_ipc_client->subscribe(topic);
-                            } });
+                              for (const auto& topic : m_subbed_topics)
+                              {
+                                  m_ipc_client->subscribe(topic);
+                              }
+                          });
     rclcpp::spin(m_ctx->node);
 }
 void App::stop()
@@ -64,7 +65,7 @@ void App::configure_scheduler()
     using args_t = std::initializer_list<std::tuple<const char*, std::optional<nlohmann::json> (*)(const std::string&, const std::shared_ptr<Context>&)>>;
     const auto send_to_iot_fn = [this](auto&& topic, auto&& payload)
     {
-        m_ipc_client->forward_payload(topic, payload);
+        m_ipc_client->forward_payload(std::forward<decltype(topic)>(topic), std::forward<decltype(payload)>(payload));
     };
     for (const auto& e : args_t{{"temp", &get_temperature},
                                 {"storage", &get_storage_space},

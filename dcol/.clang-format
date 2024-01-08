@@ -4,6 +4,7 @@ AlignTrailingComments: true
 AllowShortFunctionsOnASingleLine: true
 AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: true
+AllowShortLambdasOnASingleLine: false
 BasedOnStyle: Google
 BinPackParameters: false
 BreakBeforeBinaryOperators: true
