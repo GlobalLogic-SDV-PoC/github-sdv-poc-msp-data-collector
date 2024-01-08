@@ -6,11 +6,13 @@
 #include <fstream>
 #include <initializer_list>
 #include <ios>
+#include <ipc/client.hpp>
+#include <memory>
 #include <string>
 #include <tuple>
 
 #include "dcol/extractors.hpp"
-#include "fmt/core.h"
+#include "nlohmann/json.hpp"
 
 namespace dcol
 {
@@ -22,6 +24,13 @@ App::App()
 }
 void App::start()
 {
+    using std::placeholders::_1;
+    m_ipc_client->connect(m_config["server_address"], "dcol_response", m_ctx->node, std::bind(&App::on_ipc_received, this, _1), [this]()
+                          {
+                            for(const auto& topic : m_subbed_topics)
+                            {
+                                m_ipc_client->subscribe(topic);
+                            } });
     rclcpp::spin(m_ctx->node);
 }
 void App::stop()
@@ -34,13 +43,29 @@ void App::init()
     m_ctx->node = std::make_shared<rclcpp::Node>("dcol");
     m_ctx->node->declare_parameter("config_path", "");
     m_scheduler = std::make_shared<dcol::Scheduler>(m_ctx);
+    m_ipc_client = std::make_shared<ipc::Client>("dcol_receive");
 }
+
+void App::on_ipc_received(const std::string& payload)
+{
+    nlohmann::json msg = nlohmann::json::parse(payload);
+    const auto* _topic = msg["topic"].get_ptr<const std::string*>();
+    if (!_topic)
+    {
+        return;
+    }
+    m_scheduler->trigger_collect_event_for_topic(*_topic);
+}
+
 void App::configure_scheduler()
 {
     const std::string root_send = m_config["root_send"];
     const std::string root_query = m_config["root_query"];
     using args_t = std::initializer_list<std::tuple<const char*, std::optional<nlohmann::json> (*)(const std::string&, const std::shared_ptr<Context>&)>>;
-
+    const auto send_to_iot_fn = [this](auto&& topic, auto&& payload)
+    {
+        m_ipc_client->forward_payload(topic, payload);
+    };
     for (const auto& e : args_t{{"temp", &get_temperature},
                                 {"storage", &get_storage_space},
                                 {"ram", &get_mem_info}})
@@ -58,17 +83,17 @@ void App::configure_scheduler()
         if (collector_config["enabled"])
         {
             RCLCPP_INFO(m_ctx->node->get_logger(), "enabled %s", name);
-
+            m_subbed_topics.push_back(root_query + name);
             const auto trigger_interval = std::chrono::seconds(collector_config["interval"]);
             m_subscriptions.push_back(
-                m_scheduler->register_automatic_collector(root_send + name, root_query + name, trigger_interval, collect_fn));
+                m_scheduler->register_automatic_collector(root_send + name, root_query + name, trigger_interval, collect_fn, send_to_iot_fn));
         }
         else
         {
             RCLCPP_INFO(m_ctx->node->get_logger(), "disabled %s", name);
 
             m_subscriptions.push_back(
-                m_scheduler->register_query_collector(root_send + name, root_query + name, collect_fn));
+                m_scheduler->register_query_collector(root_send + name, root_query + name, collect_fn, send_to_iot_fn));
         }
     }
 }
@@ -76,6 +101,7 @@ void App::init_default_config()
 {
     static constexpr auto DEFAULT_CONFIG = R"(
     {
+        "server_address": "iot_server",
         "root_send": "/data_collection/send_data",
         "root_query": "/data_collection/query_data",
         "temp": {

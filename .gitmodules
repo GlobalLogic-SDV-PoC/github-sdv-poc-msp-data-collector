@@ -1,12 +1,6 @@
-[submodule "dep/external/json"]
-	path = dep/external/json
-	url = https://github.com/nlohmann/json
-[submodule "dep/external/fmt"]
-	path = dep/external/fmt
-	url = https://github.com/fmtlib/fmt.git
-[submodule "dep/external/ipc"]
-	path = dep/external/ipc
-	url = codecommit::eu-west-1://raspberry-ipc-library
-[submodule "dep/internal/ipc"]
-	path = dep/internal/ipc
-	url = codecommit::eu-west-1://raspberry-ipc-library
+[submodule "github-sdv-poc-msp-iot-bridge"]
+	path = github-sdv-poc-msp-iot-bridge
+	url = git@github.com:GlobalLogic-SDV-PoC/github-sdv-poc-msp-iot-bridge.git
+[submodule "github-sdv-poc-msp-ipc"]
+	path = github-sdv-poc-msp-ipc
+	url = git@github.com:GlobalLogic-SDV-PoC/github-sdv-poc-msp-ipc.git
