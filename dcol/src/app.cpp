@@ -7,6 +7,7 @@
 #include <ios>
 #include <ipc/client.hpp>
 #include <memory>
+#include <rclcpp/logging.hpp>
 #include <string>
 #include <tuple>
 #include <utility>
@@ -29,6 +30,7 @@ void App::start()
                           {
                               for (const auto& topic : m_subbed_topics)
                               {
+                                  RCLCPP_INFO(m_ctx->node->get_logger(), "trying to connect to a topic %s", topic.c_str());
                                   m_ipc_client->subscribe(topic);
                               }
                           });
