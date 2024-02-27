@@ -7,13 +7,13 @@
 #include <filesystem>
 namespace dcol
 {
-    namespace fs = ::std::filesystem;
-} 
+namespace fs = ::std::filesystem;
+}
 #elif __has_include(<experimental/filesystem>)
 #include <experimental/filesystem>
 namespace dcol
 {
-    namespace fs = ::std::experimental::filesystem;
-} 
+namespace fs = ::std::experimental::filesystem;
+}
 #endif
 #endif

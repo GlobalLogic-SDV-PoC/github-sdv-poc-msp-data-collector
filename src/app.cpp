@@ -149,8 +149,10 @@ void App::initDataCollection()
 {
     SPDLOG_DEBUG("[dcol] Register Infinite Data Collection: starting...");
     m_event_scheduler = std::make_shared<EventScheduler>();
-    const auto register_collector = [this](auto collect_functor, const nlohmann::json& collector_config) {
-        const auto collet_wrapper = [this](auto&& callable, std::string topic, auto&&... args) {
+    const auto register_collector = [this](auto collect_functor, const nlohmann::json& collector_config)
+    {
+        const auto collet_wrapper = [this](auto&& callable, std::string topic, auto&&... args)
+        {
             sendCollectionData(m_config["collectors"]["root_send"].get<std::string>() + topic,
                                std::invoke(std::forward<decltype(callable)>(callable), std::forward<decltype(args)>(args)...));
         };
@@ -193,7 +195,8 @@ void App::start()
 {
     SPDLOG_DEBUG("[dcol] Starting app");
     m_ipc_client->start();
-    m_ipc_thread = std::thread([this]() { m_context.run(); });
+    m_ipc_thread = std::thread([this]()
+                               { m_context.run(); });
     auto start = std::chrono::steady_clock::now();
     while (!m_canceled)
     {

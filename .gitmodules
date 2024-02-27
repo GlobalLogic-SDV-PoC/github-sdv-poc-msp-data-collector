@@ -6,4 +6,4 @@
 	url = https://github.com/google/googletest.git
 [submodule "dep/internal/ipc"]
 	path = dep/internal/ipc
-	url = codecommit::eu-west-1://raspberry-ipc-library
+	url = https://github.com/GlobalLogic-SDV-PoC/github-sdv-poc-msp-ipc.git
